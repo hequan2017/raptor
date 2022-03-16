@@ -1,7 +1,7 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"raptor/server/global"
 	"github.com/satori/go.uuid"
 )
 

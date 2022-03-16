@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"raptor/server/global"
+	"raptor/server/model/common/response"
 	"github.com/gin-gonic/gin"
 )
 

@@ -6,8 +6,8 @@ import (
 
 	"github.com/casbin/casbin/v2"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"raptor/server/global"
+	"raptor/server/model/system/request"
 	_ "github.com/go-sql-driver/mysql"
 )
 

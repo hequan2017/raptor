@@ -4,10 +4,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"raptor/server/global"
+	"raptor/server/model/common/request"
+	"raptor/server/model/system"
+	"raptor/server/utils"
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 )

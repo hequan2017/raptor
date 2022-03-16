@@ -2,7 +2,7 @@
 package autocode
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"raptor/server/global"
 )
 
 // 如果含有time.Time 请自行import time包

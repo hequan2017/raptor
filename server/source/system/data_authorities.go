@@ -3,8 +3,8 @@ package system
 import (
 	"reflect"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"raptor/server/global"
+	"raptor/server/model/system"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"

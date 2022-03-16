@@ -11,9 +11,9 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"raptor/server/global"
+	"raptor/server/model/system"
+	"raptor/server/utils"
 
 	"gorm.io/gorm"
 )

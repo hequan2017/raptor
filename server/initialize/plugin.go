@@ -1,11 +1,11 @@
 package initialize
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"raptor/server/global"
 	email "github.com/flipped-aurora/gva-plugins/email" // 在线仓库模式go
-	//"github.com/flipped-aurora/gin-vue-admin/server/plugin/email" // 本地插件仓库地址模式
-	"github.com/flipped-aurora/gin-vue-admin/server/plugin/example_plugin"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/plugin"
+	//"raptor/server/plugin/email" // 本地插件仓库地址模式
+	"raptor/server/plugin/example_plugin"
+	"raptor/server/utils/plugin"
 	"github.com/gin-gonic/gin"
 )
 

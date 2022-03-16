@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/core"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
 	"go.uber.org/zap"
+	"raptor/server/core"
+	"raptor/server/global"
+	"raptor/server/initialize"
 )
 
 //go:generate go env -w GO111MODULE=on

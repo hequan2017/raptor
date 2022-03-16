@@ -28,7 +28,7 @@ aws-s3:
   secret-id: xxxxxxxx
   secret-key: xxxxxxxx
   base-url: https://gin.vue.admin
-  path-prefix: github.com/flipped-aurora/gin-vue-admin/server
+  path-prefix: raptor/server
 captcha:
   key-long: 6
   img-width: 240
@@ -136,7 +136,7 @@ tencent-cos:
   secret-id: xxxxxxxx
   secret-key: xxxxxxxx
   base-url: https://gin.vue.admin
-  path-prefix: github.com/flipped-aurora/gin-vue-admin/server
+  path-prefix: raptor/server
 timer:
   start: true
   spec: '@daily'
@@ -150,7 +150,7 @@ timer:
 zap:
   level: info
   format: console
-  prefix: '[github.com/flipped-aurora/gin-vue-admin/server]'
+  prefix: '[raptor/server]'
   director: log
   showLine: true
   encode-level: LowercaseColorLevelEncoder

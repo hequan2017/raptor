@@ -3,7 +3,7 @@
     <div class="init_page_panle">
       <div v-if="hello < 2" id="hello" :class="[hello < 1 ? 'slide-in-fwd-top' : 'slide-out-right']" class="hello  ">
         <div>
-          <div class="hello_title">GIN-VUE-ADMIN</div>
+          <div class="hello_title">raptor</div>
           <p class="in-two a-fadeinT">初始化须知</p>
           <p class="init_p">1.您需有用一定的VUE和GOLANG基础</p>
           <p class="init_p">2.请您确认是否已经阅读过官方文档</p>
@@ -76,7 +76,7 @@ const showNext = () => {
 }
 
 const goDoc = () => {
-  window.open('https://www.gin-vue-admin.com/docs/first_master#3-init')
+  window.open('https://www.raptor.com/docs/first_master#3-init')
 }
 
 const out = ref(false)
