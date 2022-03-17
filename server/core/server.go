@@ -2,12 +2,15 @@ package core
 
 import (
 	"fmt"
+	"github.com/gogf/gf/frame/g"
+	"raptor/server/task"
 	"time"
 
+	"github.com/gogf/gf/os/gcron"
+	"go.uber.org/zap"
 	"raptor/server/global"
 	"raptor/server/initialize"
 	"raptor/server/service/system"
-	"go.uber.org/zap"
 )
 
 type server interface {
@@ -37,12 +40,18 @@ func RunWindowsServer() {
 
 	fmt.Printf(`
 	欢迎使用 raptor/server
-	当前版本:V2.5.0
-    加群方式:微信号：shouzi_1994 QQ群：622360840
-	GVA讨论社区:https://support.qq.com/products/371961
+	当前版本:V0.1
 	默认自动化文档地址:http://127.0.0.1%s/swagger/index.html
 	默认前端文件运行地址:http://127.0.0.1:8080
-	如果项目让您获得了收益，希望您能请团队喝杯可乐:https://www.raptor/server.com/docs/coffee
+	定时任务在 core/server.go 里面设置 ，会定时更新 钉钉部门用户信息
 `, address)
+
+	_, err := gcron.Add("0  10  16 * * *", func() { task.DingUpdate() })
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	g.Dump(gcron.Entries())
+
 	global.GVA_LOG.Error(s.ListenAndServe().Error())
+
 }

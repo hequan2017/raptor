@@ -1,18 +1,29 @@
-# raptor
+# raptor 猛禽运维平台
+
 <div align=center>
+<img src="https://img.shields.io/badge/raptor-0.1-blue"/>
 <img src="https://img.shields.io/badge/golang-1.16-blue"/>
 <img src="https://img.shields.io/badge/gin-1.7.0-lightBlue"/>
 <img src="https://img.shields.io/badge/vue-3.2.25-brightgreen"/>
 <img src="https://img.shields.io/badge/element--plus-2.0.1-green"/>
 <img src="https://img.shields.io/badge/gorm-1.22.5-red"/>
 </div>
+
 ## 0.1 项目介绍
 
 ```
 计划从头开始写一个 新的运维平台，尽量保持每月都更新。
 项目架构就是vue+go。具体实现的功能会在下面罗列。  1.0完成之后 ，会弄一个demo。
-
 ```
+
+## 0.2 已完成功能
+
+* 钉钉用户系统对接
+    *  钉钉登录 (前端需要修改 appid地址和redirect_uri地址,后端需要更新AppKey)
+    *  钉钉部门用户信息 定时更新 (task/ding.go   需要更新config ding的AppKey信息)
+
+
+
 
 
 
@@ -27,21 +38,17 @@
 
 ### 2.1 server项目
 
-使用 `Goland` 等编辑工具，打开server目录，不可以打开 gin-vue-admin 根目录
+使用 `Goland` 等编辑工具，打开server目录
 
 ```bash
 
 # 克隆项目
-git clone https://github.com/flipped-aurora/gin-vue-admin.git
 # 进入server文件夹
 cd server
-
 # 使用 go mod 并安装go依赖包
 go generate
-
 # 编译 
 go build -o server main.go (windows编译命令为go build -o server.exe main.go )
-
 # 运行二进制
 ./server (windows运行命令为 server.exe)
 ```
@@ -63,6 +70,8 @@ npm run serve
 导入数据库  raptor.sql， 库名字叫raptor，数据库连接文件在  server/config.yaml里面 修改连接信息。
 
 ```
+
+---
 
 ### 2.3 swagger自动化API文档
 
@@ -185,6 +194,6 @@ swag init
 - 代码生成器：后台基础逻辑以及简单curd的代码生成器。
 
 
-### QQ交流群
+### 
 
-如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。
+

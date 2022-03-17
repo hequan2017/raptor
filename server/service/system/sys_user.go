@@ -1,15 +1,26 @@
 package system
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"time"
 
+	"bytes"
+	uuid "github.com/satori/go.uuid"
+	"github.com/tidwall/gjson"
+	"gorm.io/gorm"
 	"raptor/server/global"
 	"raptor/server/model/common/request"
 	"raptor/server/model/system"
+	model "raptor/server/model/system"
 	"raptor/server/utils"
-	uuid "github.com/satori/go.uuid"
-	"gorm.io/gorm"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -215,4 +226,51 @@ func (userService *UserService) FindUserByUuid(uuid string) (err error, user *sy
 func (userService *UserService) ResetPassword(ID uint) (err error) {
 	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", ID).Update("password", utils.MD5V([]byte("123456"))).Error
 	return err
+}
+
+//钉钉签名
+func ComputeHmacSha256(message string, secret string) string {
+	key := []byte(secret)
+	h := hmac.New(sha256.New, key)
+	h.Write([]byte(message))
+	sha := h.Sum(nil)
+	return base64.StdEncoding.EncodeToString([]byte(sha))
+}
+
+func PostToken(url string, data interface{}, contentType string) string {
+
+	// 超时时间：5秒
+	client := &http.Client{Timeout: 5 * time.Second}
+	jsonStr, _ := json.Marshal(data)
+	resp, err := client.Post(url, contentType, bytes.NewBuffer(jsonStr))
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	result, _ := ioutil.ReadAll(resp.Body)
+
+	return string(result)
+}
+
+
+func (userService *UserService) DingUser(code string) (err error, userInter *model.SysUser) {
+	AppKey := "dingoagfeumjr0ellu9si2"
+	AppSecret := "EuH2pWXGU95uj47OwiGsW-h2s7sel5Feu3jT8W3KqKDYgJyfZkdpbBGOYVYCFJms"
+	timestamp := time.Now().UnixNano() / 1e6
+	strTimeStamp := fmt.Sprintf("%d", timestamp)
+	signature := ComputeHmacSha256(strTimeStamp, AppSecret) //签名
+	signature = url.QueryEscape(signature)
+
+	req := map[string]string{
+		"tmp_auth_code": code,
+	}
+	urlDing := fmt.Sprintf("https://oapi.dingtalk.com/sns/getuserinfo_bycode?accessKey=%s&timestamp=%d&signature=%s", AppKey, timestamp, signature)
+
+	r := PostToken(urlDing, req, "application/json")
+	user := gjson.Get(r, "user_info.unionid").String()
+	var u model.SysUser
+	err = global.GVA_DB.Where("unionid = ?", user).Preload("Authority").Preload("Authority").First(&u).Error
+	return err, &u
+
 }

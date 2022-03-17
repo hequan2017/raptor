@@ -164,3 +164,16 @@ export const resetPassword = (data) => {
     data: data
   })
 }
+
+
+// @Summary 用户登录 dingding
+// @Produce  application/json
+// @Param data body {code:"string",state:"string"}
+// @Router /base/login [post]
+export const dingLogin = (data) => {
+  return service({
+    url: '/base/dingLogin',
+    method: 'post',
+    data: data
+  })
+}

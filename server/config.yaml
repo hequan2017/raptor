@@ -98,6 +98,17 @@ mysql:
   max-open-conns: 100
   log-mode: error
   log-zap: false
+mysqlProd:
+  path: 192.168.209.128
+  port: "3306"
+  config: charset=utf8mb4&parseTime=True&loc=Local
+  db-name: raptor
+  username: root
+  password: "123456"
+  max-idle-conns: 10
+  max-open-conns: 100
+  log-mode: error
+  log-zap: false
 pgsql:
   path: ""
   port: ""
@@ -156,3 +167,6 @@ zap:
   encode-level: LowercaseColorLevelEncoder
   stacktrace-key: stacktrace
   log-in-console: true
+ding:
+  appkey: dingxiab7pf6yy2cfp0x
+  appsecret: tSHA06EphMPmWwVVLWDdBGWXKWYdndo4HHX-rfV6fTUCQRczx4mL3KQDlDyKb9HG

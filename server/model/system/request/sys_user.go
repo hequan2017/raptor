@@ -47,3 +47,7 @@ type ChangeUserInfo struct {
 	HeaderImg    string               `json:"headerImg" gorm:"default:https://qmplusimg.henrongyi.top/gva_header.jpg;comment:用户头像"` // 用户头像
 	Authorities  []model.SysAuthority `json:"-" gorm:"many2many:sys_user_authority;"`
 }
+
+type UserDing struct {
+	Code string `json:"code"`
+}

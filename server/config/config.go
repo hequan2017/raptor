@@ -12,6 +12,7 @@ type Server struct {
 	AutoCode Autocode `mapstructure:"autoCode" json:"autoCode" yaml:"autoCode"`
 	// gorm
 	Mysql  Mysql `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
+	MysqlProd Mysql `mapstructure:"mysqlprod" json:"mysqlprod" yaml:"mysqlprod"`
 	Pgsql  Pgsql `mapstructure:"pgsql" json:"pgsql" yaml:"pgsql"`
 	DBList []DB  `mapstructure:"db-list" json:"db-list" yaml:"db-list"`
 	// oss
@@ -27,4 +28,5 @@ type Server struct {
 
 	// 跨域配置
 	Cors CORS `mapstructure:"cors" json:"cors" yaml:"cors"`
+	Ding       Ding       `mapstructure:"ding" json:"ding" yaml:"ding"`
 }

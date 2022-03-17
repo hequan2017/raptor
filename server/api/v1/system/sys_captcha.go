@@ -1,12 +1,13 @@
 package system
 
 import (
-	"raptor/server/global"
-	"raptor/server/model/common/response"
-	systemRes "raptor/server/model/system/response"
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
 	"go.uber.org/zap"
+	"raptor/server/global"
+	"raptor/server/model/common/response"
+	"raptor/server/model/system/request"
+	systemRes "raptor/server/model/system/response"
 )
 
 // 当开启多服务器部署时，替换下面的配置，使用redis共享存储验证码
@@ -40,3 +41,17 @@ func (b *BaseApi) Captcha(c *gin.Context) {
 		}, "验证码获取成功", c)
 	}
 }
+
+
+func (b *BaseApi) DingLogin(c *gin.Context) {
+
+	var l request.UserDing
+	_ = c.ShouldBindJSON(&l)
+	if err, user :=  userService.DingUser(l.Code); err != nil {
+		global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Any("err", err))
+		response.FailWithMessage("用户名不存在或者密码错误", c)
+	} else {
+		b.tokenNext(c, *user)
+	}
+}
+

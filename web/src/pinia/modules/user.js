@@ -1,4 +1,4 @@
-import { login, getUserInfo, setSelfInfo } from '@/api/user'
+import { login, getUserInfo, setSelfInfo,dingLogin } from '@/api/user'
 import { jsonInBlacklist } from '@/api/jwt'
 import router from '@/router/index'
 import { ElMessage } from 'element-plus'
@@ -62,6 +62,23 @@ export const useUserStore = defineStore('user', () => {
       return true
     }
   }
+
+  const ddLogin  = async(loginInfo) => {
+    const res = await dingLogin(loginInfo)
+    if (res.code === 0) {
+      setUserInfo(res.data.user)
+      setToken(res.data.token)
+      const routerStore = useRouterStore()
+      await routerStore.SetAsyncRouter()
+      const asyncRouters = routerStore.asyncRouters
+      asyncRouters.forEach(asyncRouter => {
+        router.addRoute(asyncRouter)
+      })
+      router.push({ name: userInfo.value.authority.defaultRouter })
+      return true
+    }
+  }
+
   /* 登出*/
   const LoginOut = async() => {
     const res = await jsonInBlacklist()
@@ -122,6 +139,7 @@ export const useUserStore = defineStore('user', () => {
     ResetUserInfo,
     GetUserInfo,
     LoginIn,
+    ddLogin,
     LoginOut,
     changeSideMode,
     mode,
