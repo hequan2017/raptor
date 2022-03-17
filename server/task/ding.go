@@ -7,6 +7,7 @@ import (
 	"github.com/Anderson-Lu/gofasion/gofasion"
 	"github.com/casbin/casbin/v2"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	uuid "github.com/satori/go.uuid"
@@ -70,7 +71,6 @@ func Department(id int, token string) {
 	mysqlCfg := global.GVA_CONFIG.Mysql
 	if name, _ := os.Hostname(); name == "raptor" {
 		mysqlCfg = global.GVA_CONFIG.MysqlProd
-	} else {
 	}
 	a, _ := gormadapter.NewAdapter("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s?", mysqlCfg.Username, mysqlCfg.Password, mysqlCfg.Path,
 		mysqlCfg.Dbname))
@@ -183,6 +183,21 @@ func DingUpdate() {
 	getToken := GetToken(fmt.Sprintf("https://oapi.dingtalk.com/gettoken?appkey=%s&appsecret=%s", dingCfg.Key, dingCfg.Secret))
 
 	token := gjson.Get(getToken, "access_token").String()
+
+	var authority system.SysAuthority
+	db := global.GVA_DB.Model(&system.SysAuthority{})
+	_ = db.Where("authority_id = ?", "1").First(&authority).Error
+
+	if authority.AuthorityId != "1" {
+		var authorityOne model.SysAuthority
+		authorityId := model.SysAuthority{
+			AuthorityId:   "1",
+			AuthorityName: "公司",
+			ParentId: "0",
+		}
+		db1.Model(&authorityOne).Create(&authorityId)
+	}
+
 	Department(1, token)
 
 	var authorityS []model.SysAuthority
