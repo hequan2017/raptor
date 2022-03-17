@@ -6,6 +6,15 @@
 <img src="https://img.shields.io/badge/element--plus-2.0.1-green"/>
 <img src="https://img.shields.io/badge/gorm-1.22.5-red"/>
 </div>
+## 0.1 项目介绍
+
+```
+计划从头开始写一个 新的运维平台，尽量保持每月都更新。
+项目架构就是vue+go。具体实现的功能会在下面罗列。  1.0完成之后 ，会弄一个demo。
+
+```
+
+
 
 ## 1.1 使用说明
 
@@ -48,6 +57,11 @@ cnpm install || npm install
 
 # 启动web项目
 npm run serve
+```
+
+```
+导入数据库  raptor.sql， 库名字叫raptor，数据库连接文件在  server/config.yaml里面 修改连接信息。
+
 ```
 
 ### 2.3 swagger自动化API文档
