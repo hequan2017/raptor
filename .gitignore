@@ -27,4 +27,3 @@ yarn-error.log*
 /server/latest_log
 
 *.iml
-server/server.exe
