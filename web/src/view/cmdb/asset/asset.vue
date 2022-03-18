@@ -107,6 +107,14 @@
         <el-form-item label="区域:">
           <el-input v-model="formData.region" clearable placeholder="请输入" />
         </el-form-item>
+        <el-form-item label="产品线" prop="products">
+          <el-select v-model="formData.products" placeholder="请选择下拉选择产品线" multiple clearable  value-key="ID"
+                     :style="{width: '100%'}">
+            <el-option v-for="(item, index) in productsOptions" :key="item.ID" :label="item.name"
+                       :value="item"  :disabled="item.disabled"></el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item label="类型:">
           <el-input v-model="formData.type" clearable placeholder="请输入" />
         </el-form-item>
@@ -183,10 +191,12 @@ import {
 import { getDictFunc, formatDate, formatBoolean, filterDict } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref } from 'vue'
+import {getProductList} from "@/api/product";
 
 // 自动化生成的字典（可能为空）以及字段
 const formData = ref({
         region: '',
+        products:[],
         type: '',
         brand: '',
         model: '',
@@ -210,6 +220,17 @@ const total = ref(0)
 const pageSize = ref(10)
 const tableData = ref([])
 const searchInfo = ref({})
+const productsOptions = ref([])
+
+const getProductsOptions = async() => {
+  const table = await getProductList({ page: page.value, pageSize: 1000})
+  if (table.code === 0) {
+    table.data.list.forEach(function(val, index, arr){
+      productsOptions.value.push(val)
+    });
+  }
+}
+
 
 // 重置
 const onReset = () => {
@@ -313,6 +334,7 @@ const type = ref('')
 
 // 更新行
 const updateAssetFunc = async(row) => {
+    getProductsOptions()
     const res = await findAsset({ ID: row.ID })
     type.value = 'update'
     if (res.code === 0) {
@@ -342,6 +364,7 @@ const dialogFormVisible = ref(false)
 
 // 打开弹窗
 const openDialog = () => {
+    getProductsOptions()
     type.value = 'create'
     dialogFormVisible.value = true
 }
@@ -349,9 +372,11 @@ const openDialog = () => {
 // 关闭弹窗
 const closeDialog = () => {
     dialogFormVisible.value = false
+    productsOptions.value = []
     formData.value = {
         region: '',
         type: '',
+        products:[],
         brand: '',
         model: '',
         system: '',

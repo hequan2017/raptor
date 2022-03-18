@@ -20,6 +20,7 @@ func (assetService *AssetService) CreateAsset(asset autocode.Asset) (err error) 
 // DeleteAsset 删除Asset记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (assetService *AssetService)DeleteAsset(asset autocode.Asset) (err error) {
+	_ = global.GVA_DB.Model(&asset).Association("Products").Clear()
 	err = global.GVA_DB.Delete(&asset).Error
 	return err
 }
@@ -27,6 +28,7 @@ func (assetService *AssetService)DeleteAsset(asset autocode.Asset) (err error) {
 // DeleteAssetByIds 批量删除Asset记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (assetService *AssetService)DeleteAssetByIds(ids request.IdsReq) (err error) {
+	_ = global.GVA_DB.Delete(&[]autocode.Asset{},"id in ?",ids.Ids).Association("Products").Clear()
 	err = global.GVA_DB.Delete(&[]autocode.Asset{},"id in ?",ids.Ids).Error
 	return err
 }
@@ -41,7 +43,7 @@ func (assetService *AssetService)UpdateAsset(asset autocode.Asset) (err error) {
 // GetAsset 根据id获取Asset记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (assetService *AssetService)GetAsset(id uint) (err error, asset autocode.Asset) {
-	err = global.GVA_DB.Where("id = ?", id).First(&asset).Error
+	err = global.GVA_DB.Where("id = ?", id).Preload("Products").First(&asset).Error
 	return
 }
 
@@ -91,6 +93,6 @@ func (assetService *AssetService)GetAssetInfoList(info autoCodeReq.AssetSearch) 
 	if err!=nil {
     	return
     }
-	err = db.Limit(limit).Offset(offset).Find(&assets).Error
+	err = db.Limit(limit).Offset(offset).Preload("Products").Find(&assets).Error
 	return err, assets, total
 }

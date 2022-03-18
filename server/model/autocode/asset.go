@@ -26,6 +26,7 @@ type Asset struct {
       Disk  string `json:"disk" form:"disk" gorm:"column:disk;comment:硬盘;size:255;"`
       Other  string `json:"other" form:"other" gorm:"column:other;comment:其他;size:255;"`
       Uptime  *time.Time `json:"uptime" form:"uptime" gorm:"column:uptime;comment:上线时间;"`
+      Products []Product `json:"products" gorm:"many2many:asset_product_id;"`
 }
 
 
