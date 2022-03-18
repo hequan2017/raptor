@@ -95,3 +95,12 @@ export const getAssetList = (params) => {
     params
   })
 }
+
+
+export const syncAsset = (params) => {
+  return service({
+    url: '/asset/syncAsset',
+    method: 'get',
+    params
+  })
+}

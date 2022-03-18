@@ -1,14 +1,15 @@
 package autocode
 
 import (
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"raptor/server/global"
-    "raptor/server/model/autocode"
-    "raptor/server/model/common/request"
-    autocodeReq "raptor/server/model/autocode/request"
-    "raptor/server/model/common/response"
-    "raptor/server/service"
-    "github.com/gin-gonic/gin"
-    "go.uber.org/zap"
+	"raptor/server/model/autocode"
+	autocodeReq "raptor/server/model/autocode/request"
+	"raptor/server/model/common/request"
+	"raptor/server/model/common/response"
+	"raptor/server/service"
+	"raptor/server/task"
 )
 
 type AssetApi struct {
@@ -140,4 +141,18 @@ func (assetApi *AssetApi) GetAssetList(c *gin.Context) {
             PageSize: pageInfo.PageSize,
         }, "获取成功", c)
     }
+}
+
+// SyncAsset  同步
+// @Tags Asset
+// @Summary 同步
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data query autocode.Asset true 同步
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
+// @Router /asset/SyncAsset [get]
+func (assetApi *AssetApi) SyncAsset(c *gin.Context) {
+	go task.AssetUpdate()
+	response.OkWithData(gin.H{"reasset": "正在同步中"}, c)
 }

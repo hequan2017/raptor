@@ -44,6 +44,8 @@
     <div class="gva-table-box">
         <div class="gva-btn-list">
             <el-button size="small" type="primary" icon="plus" @click="openDialog">新增</el-button>
+          <el-button size="small" type="primary"  @click="sync">同步</el-button>
+
             <el-popover v-model:visible="deleteVisible" placement="top" width="160">
             <p>确定要删除吗？</p>
             <div style="text-align: right; margin-top: 8px;">
@@ -54,6 +56,7 @@
                 <el-button icon="delete" size="small" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="deleteVisible = true">删除</el-button>
             </template>
             </el-popover>
+
         </div>
         <el-table
         ref="multipleTable"
@@ -114,7 +117,6 @@
                        :value="item"  :disabled="item.disabled"></el-option>
           </el-select>
         </el-form-item>
-
         <el-form-item label="类型:">
           <el-input v-model="formData.type" clearable placeholder="请输入" />
         </el-form-item>
@@ -184,7 +186,7 @@ import {
   deleteAssetByIds,
   updateAsset,
   findAsset,
-  getAssetList
+  getAssetList,
 } from '@/api/asset'
 
 // 全量引入格式化工具 请按需保留
@@ -192,6 +194,7 @@ import { getDictFunc, formatDate, formatBoolean, filterDict } from '@/utils/form
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref } from 'vue'
 import {getProductList} from "@/api/product";
+import {syncAsset} from "@/api/asset";
 
 // 自动化生成的字典（可能为空）以及字段
 const formData = ref({
@@ -367,6 +370,16 @@ const openDialog = () => {
     getProductsOptions()
     type.value = 'create'
     dialogFormVisible.value = true
+}
+
+const sync = async() => {
+  const res = await syncAsset()
+  if (res.code === 0) {
+    ElMessage({
+      type: 'success',
+      message: '提交同步请求成功，正在同步中！！！'
+    })
+  }
 }
 
 // 关闭弹窗

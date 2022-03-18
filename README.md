@@ -21,12 +21,12 @@
 * 钉钉用户系统对接
     *  钉钉登录 (前端需要修改 appid地址和redirect_uri地址,后端需要更新AppKey)
     *  钉钉部门用户信息 定时更新 (task/ding.go   需要更新config ding的AppKey信息)
+* 资产管理
+    *  云平台密钥管理
+    *  产品线管理
+    *  主机管理(根据密钥，定时更新 云主机信息)
 
-
-
-
-
-
+  
 ## 1.1 使用说明
 
 ```
@@ -68,6 +68,15 @@ npm run serve
 
 ```
 导入数据库  raptor.sql， 库名字叫raptor，数据库连接文件在  server/config.yaml里面 修改连接信息。
+
+测试是用 config.yaml 的 mysql 线上用MysqlProd,根据主机名判断。 有需求可以搜索修改相关设置
+
+if name, _ := os.Hostname(); name == "raptor" {
+    fmt.Println("线上环境")
+    m = global.GVA_CONFIG.MysqlProd
+} else {
+    fmt.Println("测试环境")
+}
 
 ```
 

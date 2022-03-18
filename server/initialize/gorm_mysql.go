@@ -1,11 +1,13 @@
 package initialize
 
 import (
+	"fmt"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"os"
 	"raptor/server/config"
 	"raptor/server/global"
 	"raptor/server/initialize/internal"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 )
 
 // GormMysql 初始化Mysql数据库
@@ -13,6 +15,13 @@ import (
 // Author [SliverHorn](https://github.com/SliverHorn)
 func GormMysql() *gorm.DB {
 	m := global.GVA_CONFIG.Mysql
+	if name, _ := os.Hostname(); name == "raptor" {
+		fmt.Println("线上环境")
+		m = global.GVA_CONFIG.MysqlProd
+	} else {
+		fmt.Println("测试环境")
+	}
+
 	if m.Dbname == "" {
 		return nil
 	}

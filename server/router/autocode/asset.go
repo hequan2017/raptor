@@ -1,9 +1,9 @@
 package autocode
 
 import (
+	"github.com/gin-gonic/gin"
 	"raptor/server/api/v1"
 	"raptor/server/middleware"
-	"github.com/gin-gonic/gin"
 )
 
 type AssetRouter struct {
@@ -23,5 +23,6 @@ func (s *AssetRouter) InitAssetRouter(Router *gin.RouterGroup) {
 	{
 		assetRouterWithoutRecord.GET("findAsset", assetApi.FindAsset)        // 根据ID获取Asset
 		assetRouterWithoutRecord.GET("getAssetList", assetApi.GetAssetList)  // 获取Asset列表
+		assetRouterWithoutRecord.GET("syncAsset", assetApi.SyncAsset)        // 同步更新
 	}
 }

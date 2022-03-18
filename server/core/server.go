@@ -43,10 +43,11 @@ func RunWindowsServer() {
 	当前版本:V0.1
 	默认自动化文档地址:http://127.0.0.1%s/swagger/index.html
 	默认前端文件运行地址:http://127.0.0.1:8080
-	定时任务在 core/server.go 里面设置 ，会定时更新 钉钉部门用户信息
+	定时任务在 core/server.go 里面设置 ，会定时更新 钉钉部门用户信息，同步阿里云资产
 `, address)
 
 	_, err := gcron.Add("0  10  16 * * *", func() { task.DingUpdate() })
+	_, err = gcron.Add("0  10  16 * * *", func() { task.AssetUpdate() })
 	if err != nil {
 		fmt.Println(err.Error())
 	}
