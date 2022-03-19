@@ -162,4 +162,5 @@ func AssetUpdate() {
 	AssetHostUpdate()
 
 	defer db.Close()
+
 }

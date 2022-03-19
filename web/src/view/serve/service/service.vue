@@ -2,38 +2,17 @@
   <div>
     <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-        <el-form-item label="区域">
-          <el-input v-model="searchInfo.region" placeholder="搜索条件" />
+        <el-form-item label="项目名称">
+          <el-input v-model="searchInfo.name" placeholder="搜索条件" />
         </el-form-item>
         <el-form-item label="类型">
           <el-input v-model="searchInfo.type" placeholder="搜索条件" />
         </el-form-item>
-        <el-form-item label="品牌">
-          <el-input v-model="searchInfo.brand" placeholder="搜索条件" />
+        <el-form-item label="库地址">
+          <el-input v-model="searchInfo.url" placeholder="搜索条件" />
         </el-form-item>
-        <el-form-item label="型号">
-          <el-input v-model="searchInfo.model" placeholder="搜索条件" />
-        </el-form-item>
-        <el-form-item label="系统">
-          <el-input v-model="searchInfo.system" placeholder="搜索条件" />
-        </el-form-item>
-        <el-form-item label="主机名">
-          <el-input v-model="searchInfo.hostname" placeholder="搜索条件" />
-        </el-form-item>
-        <el-form-item label="资产编号">
-          <el-input v-model="searchInfo.sn" placeholder="搜索条件" />
-        </el-form-item>
-        <el-form-item label="一级负责人">
-          <el-input v-model="searchInfo.first" placeholder="搜索条件" />
-        </el-form-item>
-        <el-form-item label="内网IP">
-          <el-input v-model="searchInfo.intranet" placeholder="搜索条件" />
-        </el-form-item>
-        <el-form-item label="外网IP">
-          <el-input v-model="searchInfo.public" placeholder="搜索条件" />
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-input v-model="searchInfo.status" placeholder="搜索条件" />
+        <el-form-item label="分支">
+          <el-input v-model="searchInfo.branch" placeholder="搜索条件" />
         </el-form-item>
         <el-form-item>
           <el-button size="small" type="primary" icon="search" @click="onSubmit">查询</el-button>
@@ -44,8 +23,6 @@
     <div class="gva-table-box">
         <div class="gva-btn-list">
             <el-button size="small" type="primary" icon="plus" @click="openDialog">新增</el-button>
-          <el-button size="small" type="primary"  @click="sync">同步</el-button>
-
             <el-popover v-model:visible="deleteVisible" placement="top" width="160">
             <p>确定要删除吗？</p>
             <div style="text-align: right; margin-top: 8px;">
@@ -56,7 +33,6 @@
                 <el-button icon="delete" size="small" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="deleteVisible = true">删除</el-button>
             </template>
             </el-popover>
-
         </div>
         <el-table
         ref="multipleTable"
@@ -67,28 +43,27 @@
         @selection-change="handleSelectionChange"
         >
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="区域" prop="region" width="120" />
-        <el-table-column align="left" label="产品线" width="180">
+<!--        <el-table-column align="left" label="日期" width="180">-->
+<!--            <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>-->
+<!--        </el-table-column>-->
+        <el-table-column align="left" label="项目名称" prop="name" width="120" />
+
+          <el-table-column align="left" label="产品线" width="180">
             <template #default="scope">{{ formatProduct(scope.row.products)    }}</template>
-        </el-table-column>
-        <el-table-column align="left" label="类型" prop="type" width="120" />
-<!--        <el-table-column align="left" label="品牌" prop="brand" width="120" />-->
-        <el-table-column align="left" label="型号" prop="model" width="120" />
-<!--        <el-table-column align="left" label="系统" prop="system" width="120" />-->
-        <el-table-column align="left" label="主机名" prop="hostname" width="120" />
-        <el-table-column align="left" label="资产编号" prop="sn" width="120" />
-<!--        <el-table-column align="left" label="一级负责人" prop="first" width="120" />-->
-        <el-table-column align="left" label="内网IP" prop="intranet" width="120" />
-        <el-table-column align="left" label="外网IP" prop="public" width="120" />
-        <el-table-column align="left" label="状态" prop="status" width="120" />
-<!--        <el-table-column align="left" label="CPU" prop="cpu" width="120" />-->
-<!--        <el-table-column align="left" label="内存" prop="memory" width="120" />-->
-<!--        <el-table-column align="left" label="硬盘" prop="disk" width="120" />-->
-<!--        <el-table-column align="left" label="其他" prop="other" width="120" />-->
-<!--        <el-table-column align="left" label="上线时间" prop="uptime" width="120" />-->
-        <el-table-column align="left" label="按钮组">
+          </el-table-column>
+          <el-table-column align="left" label="类型" prop="type" width="120" />
+        <el-table-column align="left" label="库地址" prop="url" width="400" />
+        <el-table-column align="left" label="分支" prop="branch" width="120" />
+<!--        <el-table-column align="left" label="启动命令" prop="start" width="120" />-->
+<!--        <el-table-column align="left" label="关闭命令" prop="stop" width="120" />-->
+<!--        <el-table-column align="left" label="探活地址" prop="activity" width="120" />-->
+<!--        <el-table-column align="left" label="环境变量" prop="env" width="120" />-->
+<!--        <el-table-column align="left" label="打包命令" prop="shell" width="120" />-->
+        <el-table-column align="left" label="其他" prop="other" width="120" />
+        <el-table-column align="left" label="操作">
             <template #default="scope">
-            <el-button type="text" icon="edit" size="small" class="table-button" @click="updateAssetFunc(scope.row)">变更</el-button>
+            <el-button type="text" icon="edit" size="small" class="table-button" @click="updateServiceFunc(scope.row)">变更</el-button>
+              <el-button type="text" icon="edit" size="small" class="table-button" @click="buildServiceFunc(scope.row)">构建</el-button>
             <el-button type="text" icon="delete" size="small" @click="deleteRow(scope.row)">删除</el-button>
             </template>
         </el-table-column>
@@ -107,9 +82,10 @@
     </div>
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
       <el-form :model="formData" label-position="right" label-width="80px">
-        <el-form-item label="区域:">
-          <el-input v-model="formData.region" clearable placeholder="请输入" />
+        <el-form-item label="项目名称:">
+          <el-input v-model="formData.name" clearable placeholder="请输入" />
         </el-form-item>
+
         <el-form-item label="产品线" prop="products">
           <el-select v-model="formData.products" placeholder="请选择下拉选择产品线" multiple clearable  value-key="ID"
                      :style="{width: '100%'}">
@@ -124,48 +100,29 @@
           </el-select>
         </el-form-item>
 
-
-        <el-form-item label="品牌:">
-          <el-input v-model="formData.brand" clearable placeholder="请输入" />
+        <el-form-item label="库地址:">
+          <el-input v-model="formData.url" clearable placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="型号:">
-          <el-input v-model="formData.model" clearable placeholder="请输入" />
+        <el-form-item label="分支:">
+          <el-input v-model="formData.branch" clearable placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="系统:">
-          <el-input v-model="formData.system" clearable placeholder="请输入" />
+        <el-form-item label="启动命令:">
+          <el-input v-model="formData.start" clearable placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="主机名:">
-          <el-input v-model="formData.hostname" clearable placeholder="请输入" />
+        <el-form-item label="关闭命令:">
+          <el-input v-model="formData.stop" clearable placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="资产编号:">
-          <el-input v-model="formData.sn" clearable placeholder="请输入" />
+        <el-form-item label="探活地址:">
+          <el-input v-model="formData.activity" clearable placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="一级负责人:">
-          <el-input v-model="formData.first" clearable placeholder="请输入" />
+        <el-form-item label="环境变量:">
+          <el-input v-model="formData.env"  type="textarea" clearable placeholder="请输入" :autosize="{minRows: 4, maxRows: 4}" :style="{width: '100%'}"/>
         </el-form-item>
-        <el-form-item label="内网IP:">
-          <el-input v-model="formData.intranet" clearable placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="外网IP:">
-          <el-input v-model="formData.public" clearable placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="状态:">
-          <el-input v-model="formData.status" clearable placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="CPU:">
-          <el-input v-model="formData.cpu" clearable placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="内存:">
-          <el-input v-model="formData.memory" clearable placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="硬盘:">
-          <el-input v-model="formData.disk" clearable placeholder="请输入" />
+        <el-form-item label="打包命令:">
+          <el-input v-model="formData.shell"  type="textarea" clearable placeholder="请输入" :autosize="{minRows: 4, maxRows: 4}" :style="{width: '100%'}"/>
         </el-form-item>
         <el-form-item label="其他:">
           <el-input v-model="formData.other" clearable placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="上线时间:">
-          <el-date-picker v-model="formData.uptime" type="date" style="width:100%" placeholder="选择日期" clearable />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -180,46 +137,40 @@
 
 <script>
 export default {
-  name: 'Asset'
+  name: 'Service'
 }
 </script>
 
 <script setup>
 import {
-  createAsset,
-  deleteAsset,
-  deleteAssetByIds,
-  updateAsset,
-  findAsset,
-  getAssetList,
-} from '@/api/asset'
+  createService,
+  deleteService,
+  deleteServiceByIds,
+  updateService,
+  findService,
+  getServiceList
+} from '@/api/service'
 
 // 全量引入格式化工具 请按需保留
 import { getDictFunc, formatDate, formatBoolean, filterDict,formatProduct } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref } from 'vue'
 import {getProductList} from "@/api/product";
-import {syncAsset} from "@/api/asset";
-
+import { useRouter } from 'vue-router'
+const router = useRouter()
 // 自动化生成的字典（可能为空）以及字段
 const formData = ref({
-        region: '',
-        products:[],
+        name: '',
         type: '',
-        brand: '',
-        model: '',
-        system: '',
-        hostname: '',
-        sn: '',
-        first: '',
-        intranet: '',
-        public: '',
-        status: '',
-        cpu: '',
-        memory: '',
-        disk: '',
+        url: '',
+        branch: '',
+        start: '',
+        stop: '',
+        activity: '',
+        env: '',
+        shell: '',
+        products:[],
         other: '',
-        uptime: new Date(),
         })
 
 // =========== 表格控制部分 ===========
@@ -272,7 +223,7 @@ const handleCurrentChange = (val) => {
 
 // 查询
 const getTableData = async() => {
-  const table = await getAssetList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
+  const table = await getServiceList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
   if (table.code === 0) {
     tableData.value = table.data.list
     total.value = table.data.total
@@ -307,7 +258,7 @@ const deleteRow = (row) => {
         cancelButtonText: '取消',
         type: 'warning'
     }).then(() => {
-            deleteAssetFunc(row)
+            deleteServiceFunc(row)
         })
     }
 
@@ -329,7 +280,7 @@ const onDelete = async() => {
         multipleSelection.value.map(item => {
           ids.push(item.ID)
         })
-      const res = await deleteAssetByIds({ ids })
+      const res = await deleteServiceByIds({ ids })
       if (res.code === 0) {
         ElMessage({
           type: 'success',
@@ -347,20 +298,25 @@ const onDelete = async() => {
 const type = ref('')
 
 // 更新行
-const updateAssetFunc = async(row) => {
-    getProductsOptions()
-    const res = await findAsset({ ID: row.ID })
+const updateServiceFunc = async(row) => {
+  getProductsOptions()
+    const res = await findService({ ID: row.ID })
     type.value = 'update'
     if (res.code === 0) {
-        formData.value = res.data.reasset
+        formData.value = res.data.reservice
         dialogFormVisible.value = true
     }
 }
 
+const buildServiceFunc = async(row) => {
+  await router.push({path: `/layout/serve/serviceBuildCreate`, query: {id: row.ID}})
+}
+
+
 
 // 删除行
-const deleteAssetFunc = async (row) => {
-    const res = await deleteAsset({ ID: row.ID })
+const deleteServiceFunc = async (row) => {
+    const res = await deleteService({ ID: row.ID })
     if (res.code === 0) {
         ElMessage({
                 type: 'success',
@@ -378,43 +334,26 @@ const dialogFormVisible = ref(false)
 
 // 打开弹窗
 const openDialog = () => {
-    getProductsOptions()
+  getProductsOptions()
     type.value = 'create'
     dialogFormVisible.value = true
-}
-
-const sync = async() => {
-  const res = await syncAsset()
-  if (res.code === 0) {
-    ElMessage({
-      type: 'success',
-      message: '提交同步请求成功，正在同步中！！！'
-    })
-  }
 }
 
 // 关闭弹窗
 const closeDialog = () => {
     dialogFormVisible.value = false
-    productsOptions.value = []
     formData.value = {
-        region: '',
+        name: '',
         type: '',
-        products:[],
-        brand: '',
-        model: '',
-        system: '',
-        hostname: '',
-        sn: '',
-        first: '',
-        intranet: '',
-        public: '',
-        status: '',
-        cpu: '',
-        memory: '',
-        disk: '',
+        url: '',
+        branch: '',
+        start: '',
+        stop: '',
+      products:[],
+        activity: '',
+        env: '',
+        shell: '',
         other: '',
-        uptime: new Date(),
         }
 }
 // 弹窗确定
@@ -422,13 +361,13 @@ const enterDialog = async () => {
       let res
       switch (type.value) {
         case 'create':
-          res = await createAsset(formData.value)
+          res = await createService(formData.value)
           break
         case 'update':
-          res = await updateAsset(formData.value)
+          res = await updateService(formData.value)
           break
         default:
-          res = await createAsset(formData.value)
+          res = await createService(formData.value)
           break
       }
       if (res.code === 0) {

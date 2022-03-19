@@ -26,3 +26,15 @@ export const getDictFunc = async(type) => {
   const dicts = await getDict(type)
   return dicts
 }
+
+export const formatProduct = (product) => {
+  if (product !== null && product !== '') {
+    var p = []
+    product.forEach(function(val, index, arr){
+       p.push(val["name"])
+    });
+    return  p.join(" ")
+  } else {
+    return ''
+  }
+}

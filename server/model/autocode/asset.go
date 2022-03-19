@@ -27,7 +27,7 @@ type Asset struct {
       Cpu       string     `json:"cpu" form:"cpu" gorm:"column:cpu;comment:CPU;size:255;"`
       Memory    string     `json:"memory" form:"memory" gorm:"column:memory;comment:内存;size:255;"`
       Disk      string     `json:"disk" form:"disk" gorm:"column:disk;comment:硬盘;size:255;"`
-      Other     string     `json:"other" form:"other" gorm:"column:other;comment:其他;size:255;"`
+      Other     string     `json:"other" form:"other" gorm:"column:other;comment:其他;"`
       Uptime    *time.Time `json:"uptime" form:"uptime" gorm:"column:uptime;comment:上线时间;"`
       Products  []Product  `json:"products" gorm:"many2many:asset_product_id;"`
 }

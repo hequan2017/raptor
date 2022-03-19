@@ -95,6 +95,8 @@
         <el-form-item label="路径" prop="path">
           <el-input v-model="form.path" autocomplete="off" />
         </el-form-item>
+
+
         <el-form-item label="请求" prop="method">
           <el-select v-model="form.method" placeholder="请选择" style="width:100%">
             <el-option
