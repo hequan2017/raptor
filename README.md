@@ -29,6 +29,20 @@
   *  项目管理 (例如: raptor-web)
   *  构建管理 (正在开发中,计划可以在平台打包构建)
 
+
+## 0.3 快速部署
+
+```shell 
+git clone https://github.com/hequan2017/raptor
+cd raptor
+docker-compose up -d
+
+数据库账号是 root 密码123456
+连接容器mysql    把raptor.sql 导入。 
+
+登录平台账号admin，密码123456
+
+```
   
 ## 1.1 使用说明
 
