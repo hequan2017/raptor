@@ -33,18 +33,25 @@
 ### 0.3 demo (不确保是最新版,实现功能根据上面所列)
 > http://81.70.255.33:8080      账号admin 密码123456
 
-### 0.4 快速部署
+### 0.4 交流群
+
+> qq: 620176501
+
+### 0.5 快速部署
 
 ```shell 
 git clone https://github.com/hequan2017/raptor
 cd raptor
-docker-compose up -d
 
 修改server/config.yaml 里面得配置信息  数据库信息 redis连接信息
 docker mysql 是 177.7.0.13 
 docker redis 是 177.7.0.14 
 
+docker-compose up -d
+
 连接容器mysql  把raptor.sql 导入。 
+
+docker restart gva-
 
 登录平台账号admin，密码123456
 ```
@@ -228,8 +235,6 @@ swag init
 ## 作者
 
 > 何全
-### 交流群
 
-> qq: 620176501
 
 
