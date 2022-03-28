@@ -9,14 +9,15 @@
 <img src="https://img.shields.io/badge/gorm-1.22.5-red"/>
 </div>
 
-## 0.1 项目介绍
+## 介绍
+### 0.1  项目介绍
 
 ```
 计划从头开始写一个 新的运维平台，尽量保持每月都更新。
 项目架构就是vue+go。具体实现的功能会在下面罗列。  1.0完成之后 ，会弄一个demo。
 ```
 
-## 0.2 已完成功能
+### 0.2 已完成功能
 
 * 钉钉用户系统对接
     *  钉钉登录 (前端需要修改 appid地址和redirect_uri地址,后端需要更新AppKey)
@@ -29,17 +30,35 @@
   *  项目管理 (例如: raptor-web)
   *  构建管理 (正在开发中,计划可以在平台打包构建)
 
+### 0.3 demo (不确保是最新版,实现功能根据上面所列)
+> http://81.70.255.33:8080      账号admin 密码123456
 
-## 1.1 使用说明
+### 0.4 快速部署
 
+```shell 
+git clone https://github.com/hequan2017/raptor
+cd raptor
+docker-compose up -d
+
+修改server/config.yaml 里面得配置信息  数据库信息 redis连接信息
+docker mysql 是 177.7.0.13 
+docker redis 是 177.7.0.14 
+
+连接容器mysql  把raptor.sql 导入。 
+
+登录平台账号admin，密码123456
+```
+
+## 1 开发说明
+### 1.1 版本
 ```
 - node版本 > v12.18.3
-- golang版本 >= v1.16
+- golang版本 >= v1.16  < 1.18
 - IDE推荐：Goland
 -替换掉项目中的七牛云公钥，私钥，仓名和默认url地址，以免发生测试文件数据错乱
 ```
 
-### 2.1 server项目
+### 1.2 server项目
 
 使用 `Goland` 等编辑工具，打开server目录
 
@@ -56,7 +75,7 @@ go build -o server main.go (windows编译命令为go build -o server.exe main.go
 ./server (windows运行命令为 server.exe)
 ```
 
-### 2.2 web项目
+### 1.3 web项目
 
 ```bash
 # 进入web文件夹
@@ -85,9 +104,9 @@ if name, _ := os.Hostname(); name == "raptor" {
 
 ---
 
-### 2.3 swagger自动化API文档
+## 2 swagger自动化API文档
 
-#### 2.3.1 安装 swagger
+#### 2.1 安装 swagger
 
 ##### （1）可以访问外国网站
 
@@ -114,7 +133,7 @@ go generate -run "go env -w .*?"
 go get -u github.com/swaggo/swag/cmd/swag
 ```
 
-#### 2.3.2 生成API文档
+#### 2.2 生成API文档
 
 ```` shell
 cd server
@@ -124,7 +143,7 @@ swag init
 > 执行上面的命令后，server目录下会出现docs文件夹里的 `docs.go`, `swagger.json`, `swagger.yaml` 三个文件更新，启动go服务之后, 在浏览器输入 [http://localhost:8888/swagger/index.html](http://localhost:8888/swagger/index.html) 即可查看swagger文档
 
 
-## 3. 技术选型
+## 3 技术选型
 
 - 前端：用基于 [Vue](https://vuejs.org) 的 [Element](https://github.com/ElemeFE/element) 构建基础页面。
 - 后端：用 [Gin](https://gin-gonic.com/) 快速搭建基础restful风格API，[Gin](https://gin-gonic.com/) 是一个go语言编写的Web框架。
@@ -206,17 +225,11 @@ swag init
 - 代码生成器：后台基础逻辑以及简单curd的代码生成器。
 
 
-## 6.1 快速部署
+## 作者
 
-```shell 
-git clone https://github.com/hequan2017/raptor
-cd raptor
-docker-compose up -d
+> 何全
+### 交流群
 
-数据库账号是 root 密码123456
-连接容器mysql    把raptor.sql 导入。 
+> qq: 620176501
 
-登录平台账号admin，密码123456
-
-```
 
