@@ -53,7 +53,7 @@ docker-compose up -d
 
 连接容器mysql  把raptor.sql 导入。 
 
-docker restart gva-
+docker-compose   restart 
 
 登录平台账号admin，密码123456
 ```
