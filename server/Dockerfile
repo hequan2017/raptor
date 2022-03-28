@@ -18,7 +18,7 @@ WORKDIR /go/src/raptor/server
 
 COPY --from=0 /go/src/raptor/server/server ./
 COPY --from=0 /go/src/raptor/server/resource ./resource/
-COPY --from=0 /go/src/raptor/server/config.docker.yaml ./
+COPY --from=0 /go/src/raptor/server/config.yaml ./
 
 EXPOSE 8888
-ENTRYPOINT ./server -c config.docker.yaml
+ENTRYPOINT ./server -c config.yaml
