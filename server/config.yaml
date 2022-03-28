@@ -88,8 +88,8 @@ jwt:
 local:
   path: uploads/file
 mysql:
-  path: 192.168.209.128
-  port: "3306"
+  path: 177.7.0.13
+  port: "13306"
   config: charset=utf8mb4&parseTime=True&loc=Local
   db-name: raptor
   username: root
@@ -99,7 +99,7 @@ mysql:
   log-mode: error
   log-zap: false
 mysqlProd:
-  path: 192.168.100.1
+  path: 177.7.0.13
   port: "13306"
   config: charset=utf8mb4&parseTime=True&loc=Local
   db-name: raptor
