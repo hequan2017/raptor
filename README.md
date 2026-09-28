@@ -1,4 +1,8 @@
+[简体中文](README.md) | [English](README.en.md)
+
 # raptor 猛禽运维平台
+
+基于 Vue 3 + Gin 的运维平台（CMDB），打通钉钉组织架构，自动同步云上主机资产，统一管理产品线与服务。
 
 <div align=center>
 <img src="https://img.shields.io/badge/raptor-0.1-blue"/>
@@ -9,233 +13,161 @@
 <img src="https://img.shields.io/badge/gorm-1.22.5-red"/>
 </div>
 
-## 介绍
-### 0.1  项目介绍
+> **⚠️ 本项目已完结，后续不再更新维护。** 代码与文档仅供参考。项目依赖的 Go 1.17、MySQL 8.0.21、Vue 3.2 等版本均已较旧，如需二次使用请自行评估依赖安全风险并升级。
 
-```
+## ✨ 功能特性
 
-项目架构就是vue+go。具体实现的功能会在下面罗列。 
+raptor 基于 [gin-vue-admin](https://github.com/flipped-aurora/gin-vue-admin) 架构二次开发，在通用后台管理能力之上，叠加了面向运维场景的 CMDB 能力。
 
-```
+### 钉钉组织对接
 
-### 0.2 已完成功能
+- **钉钉扫码登录**：前端扫码授权后，后端根据钉钉 code 拉取用户信息，自动创建/更新账号并签发 JWT（接口 `/base/dingLogin`）
+- **部门与用户定时同步**：默认每日 16:10 拉取钉钉部门、成员、头像等信息，同步到平台用户表（`server/task/ding.go`）
+- **钉钉机器人报警**：封装钉钉机器人 text 消息推送，可供告警使用（`server/task/dingding.go`）
 
-* 钉钉用户系统对接
-    *  钉钉登录 (前端需要修改 appid地址和redirect_uri地址,后端需要更新AppKey)
-    *  钉钉部门用户信息 定时更新 (task/ding.go   需要更新config ding的AppKey信息)
-* 资产管理
-    *  云平台密钥管理 (阿里云)
-    *  产品线管理 (前端 后端 )
-    *  主机管理(根据密钥，定时更新 阿里云主机信息)
-* 服务管理
-  *  项目管理 (例如: raptor-web)
-  *  构建管理 (正在开发中,计划可以在平台打包构建)
+### 资产管理（CMDB）
 
-### 0.3 demo (不确保是最新版,实现功能根据上面所列)
-> 
+- **云平台密钥管理**：维护云平台 AccessKey（类型、区域、KeyID、Secret），作为资产同步凭证
+- **主机管理**：根据密钥定时同步阿里云 ECS 实例信息（主机名、SN、内外网 IP、CPU/内存、系统、状态、上线时间等），也支持页面上手动同步
+- **产品线关联**：主机资产与产品线多对多挂靠，支持一级负责人、资产状态等字段维护与条件搜索
+- **产品线管理**：产品线增删改查
 
-### 0.4 交流群
+### 服务管理
 
-> qq: 620176501
+- **项目管理**：登记服务信息，包括代码库地址、分支、启动/停止命令、探活地址、环境变量、打包命令等
+- **构建管理**：构建记录管理（原计划在平台内完成打包构建，开发至记录管理阶段项目即完结）
 
-### 0.5 快速部署
+### 后台管理能力（继承自 gin-vue-admin）
 
-```shell 
+- 基于 **JWT + Casbin** 的权限管理；用户、角色、菜单、API 管理与动态菜单
+- 操作记录（审计）、字典管理、多点登录限制（需开启 Redis）
+- **代码生成器**：后台基础逻辑与简单 CRUD 代码自动生成
+- **表单生成器**：借助 [@form-generator](https://github.com/JakHuang/form-generator)
+- **文件上传**：本地 / 七牛云 / 阿里云 OSS / 腾讯云 COS / 华为云 OBS / AWS S3
+- **Swagger 自动化 API 文档**、zap 日志、定时清理过期数据表
+
+## 🛠 技术栈
+
+**后端**（`server/`）
+
+- Go 1.17（开发要求 >= 1.16 且 < 1.18），Web 框架 Gin 1.7.0
+- GORM 1.22.5 + MySQL 8.0.21（docker-compose 默认），预留 PostgreSQL 配置
+- go-redis v8.11.0、golang-jwt/v4、Casbin v2.11.0
+- viper + fsnotify（yaml 配置）、zap 日志、robfig/cron 定时任务
+- swaggo/swag 1.8.0（API 文档）、阿里云 ECS/OSS、七牛云、腾讯云 COS、华为云 OBS、AWS S3 SDK
+
+**前端**（`web/`）
+
+- Vue 3.2.25 + Element Plus 2.0.1
+- Pinia 2.0.9、Vue Router 4、Axios、ECharts 4.9.0
+- Vite 2.8 构建
+
+**部署**
+
+- docker-compose（web: nginx / server: golang:alpine / mysql:8.0.21 / redis:6.0.6）
+- Kubernetes 编排文件（`deployment/`）
+
+## 🚀 快速开始
+
+### Docker Compose 一键部署
+
+```shell
 git clone https://github.com/hequan2017/raptor
 cd raptor
 
-修改server/config.yaml 里面得配置信息  数据库信息 redis连接信息
-docker mysql 是 177.7.0.13 
-docker redis 是 177.7.0.14 
+# 修改 server/config.yaml 里的配置信息：数据库、Redis、钉钉 AppKey 等
+# docker mysql 地址为 177.7.0.13
+# docker redis 地址为 177.7.0.14
 
 docker-compose up -d
 
-连接容器mysql  把raptor.sql 导入。 
+# 连接容器内 mysql（宿主机端口 13306），把根目录下的 raptor.sql 导入
 
-docker-compose   restart 
-
-登录平台账号admin，密码123456
+docker-compose restart
 ```
 
-## 1 开发说明
-### 1.1 版本
-```
-- node版本 > v12.18.3
-- golang版本 >= v1.16  < 1.18
-- IDE推荐：Goland
--替换掉项目中的七牛云公钥，私钥，仓名和默认url地址，以免发生测试文件数据错乱
-```
+启动后访问 `http://localhost:8080`，默认账号 `admin`，密码 `123456`；后端 API 服务监听 `8888` 端口。
 
-### 1.2 server项目
+### 本地开发
 
-使用 `Goland` 等编辑工具，打开server目录
+环境要求：Go >= 1.16 且 < 1.18、Node > v12.18.3、MySQL（导入根目录 `raptor.sql`，库名 `raptor`）、Redis（开启多点登录时需要）。
 
 ```bash
-
-# 克隆项目
-# 进入server文件夹
+# 后端
 cd server
-# 使用 go mod 并安装go依赖包
-go generate
-# 编译 
-go build -o server main.go (windows编译命令为go build -o server.exe main.go )
-# 运行二进制
-./server (windows运行命令为 server.exe)
-```
+go generate                    # 安装 go 依赖包
+go build -o server main.go     # Windows: go build -o server.exe main.go
+./server                       # Windows: server.exe
 
-### 1.3 web项目
-
-```bash
-# 进入web文件夹
+# 前端
 cd web
-
-# 安装依赖
-cnpm install || npm install
-
-# 启动web项目
+npm install
 npm run serve
 ```
 
-```
-导入数据库  raptor.sql， 库名字叫raptor，数据库连接文件在  server/config.yaml里面 修改连接信息。
+> 测试环境读取 `config.yaml` 的 `mysql` 配置；当主机名为 `raptor` 时自动切换为 `mysqlProd`（线上库），相关逻辑见 `server/initialize/gorm_mysql.go`。
 
-测试是用 config.yaml 的 mysql 线上用MysqlProd,根据主机名判断。 有需求可以搜索修改相关设置
+### 关键配置（server/config.yaml）
 
-if name, _ := os.Hostname(); name == "raptor" {
-    fmt.Println("线上环境")
-    m = global.GVA_CONFIG.MysqlProd
-} else {
-    fmt.Println("测试环境")
-}
+| 配置段 | 用途 |
+| --- | --- |
+| `mysql` / `mysqlProd` | 测试/生产数据库连接，按主机名自动切换 |
+| `redis` | Redis 连接信息（多点登录限制等） |
+| `ding.appkey` / `ding.appsecret` | 钉钉企业应用密钥，用于扫码登录与组织同步 |
+| `system.use-multipoint` | 是否开启多点登录限制 |
+| `jwt.signing-key` | JWT 签名密钥 |
+| `aliyun-oss` / `qiniu` / `tencent-cos` / `hua-wei-obs` / `aws-s3` / `local` | 文件上传配置 |
+| `timer` | 定时清理过期数据表（操作记录、jwt 黑名单） |
 
-```
+> 钉钉登录需要：前端修改 `web/src/view/login/index.vue` 中的 appid 与 redirect_uri，后端更新 `config.yaml` 中 `ding` 的 AppKey/AppSecret。
 
----
-
-## 2 swagger自动化API文档
-
-#### 2.1 安装 swagger
-
-##### （1）可以访问外国网站
-
-````
-go get -u github.com/swaggo/swag/cmd/swag
-````
-
-##### （2）无法访问外国网站
-
-由于国内没法安装 go.org/x 包下面的东西，推荐使用 [goproxy.cn](https://goproxy.cn) 或者 [goproxy.io](https://goproxy.io/zh/)
+### Swagger API 文档
 
 ```bash
-# 如果您使用的 Go 版本是 1.13 - 1.15 需要手动设置GO111MODULE=on, 开启方式如下命令, 如果你的 Go 版本 是 1.16 ~ 最新版 可以忽略以下步骤一
-# 步骤一、启用 Go Modules 功能
-go env -w GO111MODULE=on 
-# 步骤二、配置 GOPROXY 环境变量
-go env -w GOPROXY=https://goproxy.cn,https://goproxy.io,direct
-
-# 如果嫌弃麻烦,可以使用go generate 编译前自动执行代码, 不过这个不能使用 `Goland` 或者 `Vscode` 的 命令行终端
-cd server
-go generate -run "go env -w .*?"
-
-# 使用如下命令下载swag
-go get -u github.com/swaggo/swag/cmd/swag
-```
-
-#### 2.2 生成API文档
-
-```` shell
 cd server
 swag init
-````
+```
 
-> 执行上面的命令后，server目录下会出现docs文件夹里的 `docs.go`, `swagger.json`, `swagger.yaml` 三个文件更新，启动go服务之后, 在浏览器输入 [http://localhost:8888/swagger/index.html](http://localhost:8888/swagger/index.html) 即可查看swagger文档
+生成后启动服务，浏览器访问 [http://localhost:8888/swagger/index.html](http://localhost:8888/swagger/index.html) 查看 API 文档。国内网络可配置 `goproxy.cn` 加速依赖下载。
 
-
-## 3 技术选型
-
-- 前端：用基于 [Vue](https://vuejs.org) 的 [Element](https://github.com/ElemeFE/element) 构建基础页面。
-- 后端：用 [Gin](https://gin-gonic.com/) 快速搭建基础restful风格API，[Gin](https://gin-gonic.com/) 是一个go语言编写的Web框架。
-- 数据库：采用`MySql`(5.6.44)版本，使用 [gorm](http://gorm.cn) 实现对数据库的基本操作。
-- 缓存：使用`Redis`实现记录当前活跃用户的`jwt`令牌并实现多点登录限制。
-- API文档：使用`Swagger`构建自动化文档。
-- 配置文件：使用 [fsnotify](https://github.com/fsnotify/fsnotify) 和 [viper](https://github.com/spf13/viper) 实现`yaml`格式的配置文件。
-- 日志：使用 [zap](https://github.com/uber-go/zap) 实现日志记录。
-
-## 4. 项目架构
-
-### 4.1 系统架构图
+## 📸 系统架构
 
 ![系统架构图](http://qmplusimg.henrongyi.top/gva/gin-vue-admin.png)
 
-### 4.2 前端详细设计图 （提供者:<a href="https://github.com/baobeisuper">baobeisuper</a>）
+前端详细设计图（提供者：[baobeisuper](https://github.com/baobeisuper)）
 
 ![前端详细设计图](http://qmplusimg.henrongyi.top/naotu.png)
 
-### 4.3 目录结构
+## 📁 目录结构
 
 ```
-    ├── server
-        ├── api             (api层)
-        │   └── v1          (v1版本接口)
-        ├── config          (配置包)
-        ├── core            (核心文件)
-        ├── docs            (swagger文档目录)
-        ├── global          (全局对象)                    
-        ├── initialize      (初始化)                        
-        │   └── internal    (初始化内部函数)                            
-        ├── middleware      (中间件层)                        
-        ├── model           (模型层)                    
-        │   ├── request     (入参结构体)                        
-        │   └── response    (出参结构体)                            
-        ├── packfile        (静态文件打包)                        
-        ├── resource        (静态资源文件夹)                        
-        │   ├── excel       (excel导入导出默认路径)                        
-        │   ├── page        (表单生成器)                        
-        │   └── template    (模板)                            
-        ├── router          (路由层)                    
-        ├── service         (service层)                    
-        ├── source          (source层)                    
-        └── utils           (工具包)                    
-            ├── timer       (定时器接口封装)                        
-            └── upload      (oss接口封装)                        
-    
-    └─web            （前端文件）
-        ├─public        （发布模板）
-        └─src           （源码包）
-            ├─api       （向后台发送ajax的封装层）
-            ├─assets	（静态文件）
-            ├─components（组件）
-            ├─router	（前端路由）
-            ├─store     （vuex 状态管理仓）
-            ├─style     （通用样式文件）
-            ├─utils     （前端工具库）
-            └─view      （前端页面）
-
+raptor
+├── server                # 后端（Gin）
+│   ├── api/v1            # 接口层（system 系统模块 / autocode 业务模块）
+│   ├── core              # 启动入口与定时任务注册
+│   ├── docs              # Swagger 文档
+│   ├── initialize        # 初始化（路由、DB、Redis、日志）
+│   ├── middleware        # 中间件（JWT、Casbin、操作记录等）
+│   ├── model             # 模型层
+│   ├── router            # 路由层
+│   ├── service           # 服务层
+│   ├── task              # 定时任务（钉钉同步、阿里云资产同步）
+│   └── utils             # 工具包
+├── web                   # 前端（Vue 3）
+│   └── src/view          # 页面（cmdb / serve / superAdmin / systemTools 等）
+├── deployment            # Kubernetes 编排文件
+├── docker-compose.yaml   # 一键部署
+└── raptor.sql            # 数据库初始化脚本
 ```
 
-## 5. 主要功能
+## 📄 License
 
-- 权限管理：基于`jwt`和`casbin`实现的权限管理。
-- 文件上传下载：实现基于`七牛云`, `阿里云`, `腾讯云` 的文件上传操作(请开发自己去各个平台的申请对应 `token` 或者对应`key`)。
-- 分页封装：前端使用 `mixins` 封装分页，分页方法调用 `mixins` 即可。
-- 用户管理：系统管理员分配用户角色和角色权限。
-- 角色管理：创建权限控制的主要对象，可以给角色分配不同api权限和菜单权限。
-- 菜单管理：实现用户动态菜单配置，实现不同角色不同菜单。
-- api管理：不同用户可调用的api接口的权限不同。
-- 配置管理：配置文件可前台修改(在线体验站点不开放此功能)。
-- 条件搜索：增加条件搜索示例。
-- restful示例：可以参考用户管理模块中的示例API。
-	- 前端文件参考: [web/src/view/superAdmin/api/api.vue](https://github.com/flipped-aurora/gin-vue-admin/blob/master/web/src/view/superAdmin/api/api.vue)
-    - 后台文件参考: [server/router/sys_api.go](https://github.com/flipped-aurora/gin-vue-admin/blob/master/server/router/sys_api.go)
-- 多点登录限制：需要在`config.yaml`中把`system`中的`use-multipoint`修改为true(需要自行配置Redis和Config中的Redis参数，测试阶段，有bug请及时反馈)。
-- 分片长传：提供文件分片上传和大文件分片上传功能示例。
-- 表单生成器：表单生成器借助 [@form-generator](https://github.com/JakHuang/form-generator) 。
-- 代码生成器：后台基础逻辑以及简单curd的代码生成器。
+本项目基于 [Apache License 2.0](LICENSE) 开源。
 
+## 👤 作者 & 交流
 
-## 作者
+> 作者：何全（[hequan2017](https://github.com/hequan2017)）
 
-> 何全
+### 交流群
 
-
-
+> qq: 620176501
